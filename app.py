@@ -112,9 +112,12 @@ if st.sidebar.button("Recommend Products") and author_id is not None:
             'review_input': review_input,
             'ingredients_input': ingredients_input
         }
+        try:
+            estimated_rating = keras_model.predict(model_inputs)[0][0]
+        except Exception as e:
+            st.error(f"Error in model prediction: {e}")
+            raise
 
-        # Predict the estimated rating
-        estimated_rating = keras_model.predict(model_inputs)[0][0]
 
         new_row = pd.DataFrame({
             'Brand Name': [product['brand_name']],
