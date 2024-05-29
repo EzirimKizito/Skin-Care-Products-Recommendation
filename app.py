@@ -1,4 +1,3 @@
-
 %%writefile app.py
 import streamlit as st
 import numpy as np
@@ -12,21 +11,16 @@ def rmse(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 # Load necessary objects and model
-@st.cache_data
+@st.cache(allow_output_mutation=True)
 def load_resources():
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/user_id_encoder.pkl', 'rb') as file:
-        user_id_encoder = pickle.load(file)
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/skin_type_encoder.pkl', 'rb') as file:
-        skin_type_encoder = pickle.load(file)
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/skin_tone_encoder.pkl', 'rb') as file:
-        skin_tone_encoder = pickle.load(file)
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/product_name_encoder.pkl', 'rb') as file:
-        product_name_encoder = pickle.load(file)
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/brand_name_encoder.pkl', 'rb') as file:
-        brand_name_encoder = pickle.load(file)
-    with open('/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/standardscaler.pkl', 'rb') as file:
-        scaler = pickle.load(file)
-    model_path = '/content/drive/MyDrive/Skincare Recommendation Dataset 2/Deployments/Transformers_and_models/GMF_NCF_model'
+    base_path = './'  # Assuming all files are in the current directory
+    user_id_encoder = pickle.load(open(f"{base_path}user_id_encoder.pkl", 'rb'))
+    skin_type_encoder = pickle.load(open(f"{base_path}skin_type_encoder.pkl", 'rb'))
+    skin_tone_encoder = pickle.load(open(f"{base_path}skin_tone_encoder.pkl", 'rb'))
+    product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
+    brand_name_encoder = pickle.load(open(f"{base_path}brand_name_encoder.pkl", 'rb'))
+    scaler = pickle.load(open(f"{base_path}standardscaler.pkl", 'rb'))
+    model_path = f"{base_path}GMF_NCF_model"
     keras_model = load_model(model_path, custom_objects={'rmse': rmse})
 
     return user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model
@@ -52,9 +46,9 @@ except IndexError:
     st.sidebar.error("Invalid User ID Index!")
 
 # Load and prepare product data
-product_details = pd.read_csv("/content/drive/MyDrive/Skincare Recommendation Dataset 2/Cleaned_Products_And_Reviews_Dataset/unique_products.csv")
+product_details = pd.read_csv(f"{base_path}unique_products.csv")
 product_details['price_ws'] = product_details['price_usd_reviews']
-product_details[['price_usd_reviews', 'rating_products', 'loves_count']] = scaler.transform(product_details[['price_usd_reviews', 'loves_count', 'rating_products' ]])
+product_details[['price_usd_reviews', 'rating_products', 'loves_count']] = scaler.transform(product_details[['price_usd_reviews', 'loves_count', 'rating_products']])
 
 # On button click, predict the ratings
 if st.sidebar.button("Recommend Products") and author_id is not None:
@@ -127,7 +121,6 @@ if st.sidebar.button("Filter by Budget"):
     if 'predictions_df' in st.session_state:
         filtered_df = st.session_state['predictions_df']
         filtered_df = filtered_df[filtered_df['Price'] <= budget]
-        st.write(filtered_df.sort_values( by='Estimated Rating', ascending=False).head(10))
+        st.write(filtered_df.sort_values(by='Estimated Rating', ascending=False).head(10))
     else:
         st.error("Please generate predictions first.")
-
