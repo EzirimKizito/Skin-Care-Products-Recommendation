@@ -61,6 +61,7 @@ except IndexError:
     st.sidebar.error("Invalid User ID Index!")
 
 # Load and prepare product data
+base_path = './'
 product_details = pd.read_csv(f"{base_path}unique_products.csv")
 product_details['price_ws'] = product_details['price_usd_reviews']
 product_details[['price_usd_reviews', 'rating_products', 'loves_count']] = scaler.transform(product_details[['price_usd_reviews', 'loves_count', 'rating_products']])
