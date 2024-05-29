@@ -11,18 +11,31 @@ def rmse(y_true, y_pred):
 
 # Load necessary objects and model
 @st.cache_data
+import os
+
 def load_resources():
-    base_path = ''  # Assuming all files are in the current directory
+    base_path = './'  # Adjust this path if your files are not in the current directory
+    resources = ['user_id_encoder.pkl', 'skin_type_encoder.pkl', 'skin_tone_encoder.pkl', 
+                 'product_name_encoder.pkl', 'brand_name_encoder.pkl', 'standardscaler.pkl',
+                 'GMF_NCF_model']
+    
+    # Check each resource for existence before loading
+    for resource in resources:
+        resource_path = f"{base_path}{resource}"
+        if not os.path.exists(resource_path):
+            raise FileNotFoundError(f"Expected resource not found: {resource_path}")
+
+    # If all resources are confirmed to be present, proceed to load
     user_id_encoder = pickle.load(open(f"{base_path}user_id_encoder.pkl", 'rb'))
     skin_type_encoder = pickle.load(open(f"{base_path}skin_type_encoder.pkl", 'rb'))
     skin_tone_encoder = pickle.load(open(f"{base_path}skin_tone_encoder.pkl", 'rb'))
     product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
     brand_name_encoder = pickle.load(open(f"{base_path}brand_name_encoder.pkl", 'rb'))
     scaler = pickle.load(open(f"{base_path}standardscaler.pkl", 'rb'))
-    model_path = f"{base_path}GMF_NCF_model"
-    keras_model = load_model(model_path, custom_objects={'rmse': rmse})
+    keras_model = load_model(f"{base_path}GMF_NCF_model")
 
     return user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model
+
 
 user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model = load_resources()
 
