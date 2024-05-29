@@ -13,8 +13,8 @@ def rmse(y_true, y_pred):
 @st.cache_data
 def load_resources():
     base_path = './'  # Assuming all files are in the current directory
-    user_id_encoder = pickle.load(user_id_encoder.pkl)
-    skin_type_encoder = pickle.load(skin_type_encoder.pkl)
+    user_id_encoder = pickle.load(open(user_id_encoder.pkl))
+    skin_type_encoder = pickle.load(open(skin_type_encoder.pkl))
     skin_tone_encoder = pickle.load(open(f"{base_path}skin_tone_encoder.pkl", 'rb'))
     product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
     brand_name_encoder = pickle.load(open(f"{base_path}brand_name_encoder.pkl", 'rb'))
