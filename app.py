@@ -1,4 +1,3 @@
-%%writefile app.py
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -11,7 +10,7 @@ def rmse(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 # Load necessary objects and model
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def load_resources():
     base_path = './'  # Assuming all files are in the current directory
     user_id_encoder = pickle.load(open(f"{base_path}user_id_encoder.pkl", 'rb'))
