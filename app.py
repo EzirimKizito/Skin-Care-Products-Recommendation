@@ -3,6 +3,8 @@ import numpy as np
 import os
 import pandas as pd
 import pickle
+import requests
+import io
 from tensorflow.keras.models import load_model
 from tensorflow.keras import backend as K
 
@@ -12,10 +14,6 @@ def rmse(y_true, y_pred):
 
 # Load necessary objects and model
 @st.cache_data
-import requests
-import io
-
-@st.cache(allow_output_mutation=True)
 def load_resources():
     base_url = "https://github.com/Alpha0003/Skin-Care-Products-Recommendation/main/"
     files = {
