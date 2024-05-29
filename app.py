@@ -15,32 +15,27 @@ def rmse(y_true, y_pred):
 # Load necessary objects and model
 @st.cache_data
 def load_resources():
-    base_url = "https://github.com/Alpha0003/Skin-Care-Products-Recommendation/main/"
-    files = {
-        'user_id_encoder': 'user_id_encoder.pkl',
-        'skin_type_encoder': 'skin_type_encoder.pkl',
-        'skin_tone_encoder': 'skin_tone_encoder.pkl',
-        'product_name_encoder': 'product_name_encoder.pkl',
-        'brand_name_encoder': 'brand_name_encoder.pkl',
-        'standardscaler': 'standardscaler.pkl'
-    }
+    base_path = './'  # Adjust this path if your files are not in the current directory
+    resources = ['user_id_encoder.pkl', 'skin_type_encoder.pkl', 'skin_tone_encoder.pkl', 
+                 'product_name_encoder.pkl', 'brand_name_encoder.pkl', 'standardscaler.pkl',
+                 'GMF_NCF_model']
     
-    resources = {}
-    for key, filename in files.items():
-        url = f"{base_url}{filename}"
-        response = requests.get(url)
-        response.raise_for_status()  # will raise an exception for 404 errors
-        resources[key] = pickle.loads(response.content)
-    
-    model_url = f"{base_url}GMF_NCF_model"
-    model_response = requests.get(model_url)
-    model_response.raise_for_status()
-    model_path = io.BytesIO(model_response.content)
-    keras_model = load_model(model_path, custom_objects={'rmse': rmse})
-    
-    return (resources['user_id_encoder'], resources['skin_type_encoder'], resources['skin_tone_encoder'],
-            resources['product_name_encoder'], resources['brand_name_encoder'], resources['standardscaler'],
-            keras_model)
+    # Check each resource for existence before loading
+    for resource in resources:
+        resource_path = f"{base_path}{resource}"
+        if not os.path.exists(resource_path):
+            raise FileNotFoundError(f"Expected resource not found: {resource_path}")
+
+    # If all resources are confirmed to be present, proceed to load
+    user_id_encoder = pickle.load(open('user_id_encoder.pkl', 'rb'))
+    skin_type_encoder = pickle.load(open(f"{base_path}skin_type_encoder.pkl", 'rb'))
+    skin_tone_encoder = pickle.load(open(f"{base_path}skin_tone_encoder.pkl", 'rb'))
+    product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
+    brand_name_encoder = pickle.load(open(f"{base_path}brand_name_encoder.pkl", 'rb'))
+    scaler = pickle.load(open(f"{base_path}standardscaler.pkl", 'rb'))
+    keras_model = load_model(f"{base_path}GMF_NCF_model")
+
+    return user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model
 
 # Usage
 user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model = load_resources()
