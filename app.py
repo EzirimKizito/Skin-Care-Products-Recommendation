@@ -48,7 +48,7 @@ st.markdown("An Undergraduate Project by: Fadhilat Elakamah Arobovi")
 st.sidebar.header("User Input Features")
 
 # User details input
-author_id_index = st.sidebar.text_input("User ID Index", "1")
+author_id_index = st.sidebar.text_input("User ID Index", "10")
 skin_tone = st.sidebar.selectbox("Skin Tone", options=['dark', 'deep', 'fair', 'fairLight', 'light', 'lightMedium', 'medium', 'mediumTan', 'olive', 'porcelain', 'rich', 'tan'])
 skin_type = st.sidebar.selectbox("Skin Type", options=['combination', 'dry', 'normal', 'oily'])
 budget = st.sidebar.number_input("Budget (USD)", min_value=0, value=50, step=5)
