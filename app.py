@@ -34,7 +34,7 @@ def load_resources():
     product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
     brand_name_encoder = pickle.load(open(f"{base_path}brand_name_encoder.pkl", 'rb'))
     scaler = pickle.load(open(f"{base_path}standardscaler.pkl", 'rb'))
-    keras_model = load_model(f"{base_path}GMF_NCF_model")
+    keras_model = load_model(f"{base_path}GMF_NCF_model", custome_objects={'rmse':rmse})
 
     return user_id_encoder, skin_type_encoder, skin_tone_encoder, product_name_encoder, brand_name_encoder, scaler, keras_model
 
