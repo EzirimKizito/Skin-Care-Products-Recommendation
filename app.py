@@ -27,7 +27,7 @@ def load_resources():
             raise FileNotFoundError(f"Expected resource not found: {resource_path}")
 
     # If all resources are confirmed to be present, proceed to load
-    user_id_encoder = pickle.load(open('user_id_encoder.pkl', 'rb'))
+    user_id_encoder = pickle.load(open('/user_id_encoder.pkl', 'rb'))
     skin_type_encoder = pickle.load(open(f"{base_path}skin_type_encoder.pkl", 'rb'))
     skin_tone_encoder = pickle.load(open(f"{base_path}skin_tone_encoder.pkl", 'rb'))
     product_name_encoder = pickle.load(open(f"{base_path}product_name_encoder.pkl", 'rb'))
