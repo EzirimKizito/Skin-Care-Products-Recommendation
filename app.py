@@ -3,7 +3,7 @@ import numpy as np
 import os
 import pandas as pd
 import pickle
-import sklearn
+import scikit-learn as sklearn
 import requests
 import io
 from tensorflow.keras.models import load_model
