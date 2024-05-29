@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import os
 import pandas as pd
 import pickle
 from tensorflow.keras.models import load_model
@@ -11,8 +12,6 @@ def rmse(y_true, y_pred):
 
 # Load necessary objects and model
 @st.cache_data
-import os
-
 def load_resources():
     base_path = './'  # Adjust this path if your files are not in the current directory
     resources = ['user_id_encoder.pkl', 'skin_type_encoder.pkl', 'skin_tone_encoder.pkl', 
